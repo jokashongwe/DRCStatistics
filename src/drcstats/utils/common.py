@@ -99,11 +99,11 @@ def parse_phones(raw: list[str]) -> Optional[list[str]]:
     )
 
 
-def parse_siteurl(raw: list[str]):
+def parse_domain(raw: list[str]):
     for elt in raw:
         if "www" in elt:
-            url = elt.split("www")[-1]
-            return f"www{url}"
+            url = elt.split("www.")[-1]
+            return f"{url}"
 
 
 def parse_webinfo(raw: list[str]):
@@ -136,10 +136,10 @@ def parse_address(raw: list[str], cmp_name: str = "") -> Optional[str]:
 
 
 def parse_address_string(elt: str):
-    for indice in ADRESS_INDICATORS:
-        if indice in elt.lower():
-            adresse = elt.split(indice.capitalize())[-1]
-            return f"{indice.capitalize()}{adresse}"
+    for idx in ADDRESS_INDICATORS:
+        if idx in elt.lower():
+            address = elt.split(idx.capitalize())[-1]
+            return f"{idx.capitalize()}{address}"
     if "," in elt:
         return elt.split(",")[-1]
 
@@ -191,7 +191,7 @@ EXCLUDE_LEGALS = ["Manioc", *FEC_CONSTANTS] + [
 EXCLUDE_PROFILE_NAME = ["Manioc"]
 
 if __name__ == "__main__":
-    addresse = "AGRIUMBE Immeuble INTERFINA, 9, Boulevard du 30 juin"
+    address = "AGRIUMBE Immeuble INTERFINA, 9, Boulevard du 30 juin"
     legals = [
         ["EPICIER 12, Kivunda C/Mont-Ngafula(MBUDI)"],
         ["MANITECH 26, KUTU, C/Ngaliema"],

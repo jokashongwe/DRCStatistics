@@ -2,8 +2,8 @@ import logging
 import os
 from argparse import Namespace
 
-from src.drcstats.utils.fec_processor import FecProcessor
-import src.drcstats.utils.common as utils
+from drcstats.utils.fec_processor import FecProcessor
+import drcstats.utils.common as utils
 from pathlib import Path
 from typing import List, Dict, Optional
 import pdfplumber
@@ -12,35 +12,30 @@ import argparse
 import progressbar
 import codecs
 import time
+import hashlib
+import json
 from unidecode import unidecode
 
 FAILURE = "failure"
 SUCCESS = "success"
 
 
-PROFILE_DEFAULT_SCHEMA: dict = {
-    "name": "",
-    "phone": "",
-    "email": "",
-    "social_links": None,
-}
-
 CONTACT_DEFAULT_SCHEMA: dict = {
-    "name": "",
-    "phones": [],
-    "email": "",
+    "contact_name": "",
+    "contact_phones": [],
+    "contact_email": "",
 }
 
 FEC_CONSTANT = "REPERTOIRE DES ENTREPRISES COMMERCIALES, INDUSTRIELLES ET DE SERVICES"
 
 COMPANY_DEFAULT_SCHEMA: dict = {
-    "legal_name": "",
-    "city": "",
-    "state": "",
-    "sectors": [],
-    "address": "",
-    "site_url": "",
-    "contact": CONTACT_DEFAULT_SCHEMA,
+    "company_legal_name": "",
+    "company_city": "",
+    "company_state": "",
+    "company_sectors": [],
+    "company_address": "",
+    "company_domain": "",
+    "company_contact": CONTACT_DEFAULT_SCHEMA,
 }
 
 
@@ -58,23 +53,22 @@ class ProcessFEC2019(FecProcessor):
         try:
             return self._process_file()
         except Exception as e:
-            logging.info(f"An error occured during processing {e}")
+            logging.info(f"An error occurred during processing {e}")
             e.with_traceback()
             self.status = {"error": e, "status": FAILURE}
 
     def _process_file(self):
-        companies = self.extractor()
         parent_folder = Path(os.path.join(os.getcwd(), "generated"))
-        destination_filename = Path(
-            os.path.join(os.getcwd(), "generated", f"produced_{int(time.time())}.json")
+        company_destination_filename = Path(
+            os.path.join(os.getcwd(), "generated", f"produced_company_{int(time.time())}.json")
+        )
+        contact_destination_filename = Path(
+            os.path.join(os.getcwd(), "generated", f"produced_contact_{int(time.time())}.json")
         )
         if not parent_folder.exists():
             parent_folder.mkdir(parents=True)
-        with codecs.open(destination_filename, "w", encoding="utf-8") as file:
-            self.write_file_to_json(companies, file)
-        self.status = {"status": SUCCESS}
-        logging.info(f"End processing, destination file {destination_filename}")
-        return destination_filename
+        self.extractor()
+        return company_destination_filename
 
     def get_status(self) -> dict:
         return self.status
@@ -110,9 +104,9 @@ class ProcessFEC2019(FecProcessor):
                 last = parts[-1]
                 if 'www' in last:
                     email = last.split('www')[0]
-                    siteurl = last.split('www')[-1]
+                    site_url = last.split('www')[-1]
                     company = utils.append_to_company(company, email)
-                    company = utils.append_to_company(company, f"www{siteurl}")
+                    company = utils.append_to_company(company, f"www{site_url}")
                 else:
                     company = utils.append_to_company(company, last)
             else:
@@ -128,32 +122,40 @@ class ProcessFEC2019(FecProcessor):
         return companies
 
     def _parse_companies(
-        self, page: Page, state: Optional[str]
+        self, page: Page, state: Optional[str], dest_filename:str
     ) -> list[COMPANY_DEFAULT_SCHEMA]:
         companies = []
+        contacts = []
         page_text = page.extract_text()
         raw_companies = self._get_companies_from_tables(page_text, state=state)
         for raw in raw_companies:
             company_name = utils.parse_legal(raw)
             if not company_name:
                 continue
-            company = {
-                "legal_name": company_name,
-                "city": utils.parse_city(raw),
-                "state": utils.parse_state(raw),
-                "sectors": utils.parse_sectors(raw),
-                "address": utils.parse_address(raw, company_name),
-                "contact": {
-                    "name": utils.parse_contact_name(raw),
-                    "phones": utils.parse_phones(raw),
-                    "email": utils.parse_webinfo(raw),
-                    "site_url": utils.parse_siteurl(raw),
-                },
+            contact =  {
+                "contact_name": utils.parse_contact_name(raw),
+                "contact_phones": utils.parse_phones(raw),
+                "contact_email": utils.parse_webinfo(raw),
             }
+            contact["contact_id"] = hashlib.md5(json.dumps(contact).encode("utf-8")).hexdigest()
+            company = {
+                "company_legal_name": company_name,
+                "company_city": utils.parse_city(raw),
+                "company_state": utils.parse_state(raw),
+                "company_sectors": utils.parse_sectors(raw),
+                "company_address": utils.parse_address(raw, company_name),
+                "company_domain":  utils.parse_domain(raw),
+                "company_contact": contact
+            }
+            contacts.append(contact)
             companies.append(company)
-        return companies
+        with codecs.open(dest_filename, "a+", encoding="utf-8") as file:
+            self.write_file_to_json(companies, file)
+        dest_filename = dest_filename.replace("company", "contact")
+        with codecs.open(dest_filename, "a+", encoding="utf-8") as file:
+            self.write_file_to_json(contacts, file)
 
-    def extractor(self) -> List[Dict]:
+    def extractor(self, dest_filename="output") -> List[Dict]:
         companies = []
         with pdfplumber.open(self.filename) as pdf:
             pages = pdf.pages
@@ -172,7 +174,7 @@ class ProcessFEC2019(FecProcessor):
                 page_str = "".join([t["text"] for t in page.chars])
                 if new_state := utils.parse_state(list_comp=page_str):
                     state = new_state
-                if page_companies := self._parse_companies(page, state):
+                if page_companies := self._parse_companies(page, state, dest_filename):
                     companies += page_companies
             processing_progress_bar.finish()
         return companies
