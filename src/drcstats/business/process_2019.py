@@ -2,8 +2,8 @@ import logging
 import os
 from argparse import Namespace
 
-from drcstats.utils.fec_processor import FecProcessor
-import drcstats.utils.common as utils
+from src.drcstats.utils.fec_processor import FecProcessor
+import src.drcstats.utils.common as utils
 from pathlib import Path
 from typing import List, Dict, Optional
 import pdfplumber
@@ -54,20 +54,19 @@ class ProcessFEC2019(FecProcessor):
             return self._process_file()
         except Exception as e:
             logging.info(f"An error occurred during processing {e}")
-            e.with_traceback()
             self.status = {"error": e, "status": FAILURE}
 
     def _process_file(self):
         parent_folder = Path(os.path.join(os.getcwd(), "generated"))
         company_destination_filename = Path(
-            os.path.join(os.getcwd(), "generated", f"produced_company_{int(time.time())}.json")
+            os.path.join(os.getcwd(), "generated", f"produced_fec_company_{int(time.time())}.json")
         )
         contact_destination_filename = Path(
-            os.path.join(os.getcwd(), "generated", f"produced_contact_{int(time.time())}.json")
+            os.path.join(os.getcwd(), "generated", f"produced_fec_contact_{int(time.time())}.json")
         )
         if not parent_folder.exists():
             parent_folder.mkdir(parents=True)
-        self.extractor()
+        self.extractor(str(company_destination_filename))
         return company_destination_filename
 
     def get_status(self) -> dict:
@@ -135,16 +134,21 @@ class ProcessFEC2019(FecProcessor):
             contact =  {
                 "contact_name": utils.parse_contact_name(raw),
                 "contact_phones": utils.parse_phones(raw),
+                "contact_birthday": None,
+                "contact_role": None,
+                "contact_address": None,
                 "contact_email": utils.parse_webinfo(raw),
             }
             contact["contact_id"] = hashlib.md5(json.dumps(contact).encode("utf-8")).hexdigest()
             company = {
                 "company_legal_name": company_name,
+                "company_alternative_name": None,
                 "company_city": utils.parse_city(raw),
                 "company_state": utils.parse_state(raw),
                 "company_sectors": utils.parse_sectors(raw),
                 "company_address": utils.parse_address(raw, company_name),
                 "company_domain":  utils.parse_domain(raw),
+                "company_capital": None,
                 "company_contact": contact
             }
             contacts.append(contact)

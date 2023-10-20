@@ -23,4 +23,4 @@ class FecProcessor(ABC):
     
     def write_file_to_json(self, records: List[Dict], file: TextIO) -> None:
         for company in records:
-            file.write(json.dumps(company) + "\n")
+            file.write(json.dumps(company, ensure_ascii=False) + "\n")
