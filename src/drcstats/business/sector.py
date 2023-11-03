@@ -5,6 +5,21 @@ import psycopg2
 from typing import List, Dict
 from src.drcstats.utils.upload import upload_contact_parsed
 
+COMPANY_SECTORS_KEY = [
+    "Mine","mines","Minier", "Minière", "Informatique","Beauté", "Import", "Placement", "Sous-traitance", 
+    "Cosmétique", "Massage", "Logiciel", "Logiciels", "Agriculture", "élevage", "Foresterie", "Agro-foresterie",
+    "Cuivre", "Cobalt", "Coltan", "Conseil", "Finance", "Banque", "Télécommunication","Fôret","bois","Alcool", "Bar",
+    "Micro-finance", "Téléphonie", "Internet", "Réseaux","Paie", "Commerce","Mobile", "Transport",
+    "Location", "Service", "Assistance", "Recherche", "Architecture", "Construction", "Bâtiment",
+    "Sport","Fitness", "Maquillage", "épillation", "Coiffure", "Club", "Equipements","électricité","Mécanique","réfection"
+    "Fourniture", "Livraison", "Restaurant","Restauration", "Cuisine", "Ménager","nettoyage","Cleaning", "Réparation",
+    "Photographie", "Humour", "Spectacle", "Cinéma", "Art","Culture", "Formation","éducation", "Comptable", "Comptabilité"
+    "Fiscalité", "Gestion", "Export", "Fret", "Voyage","Tourisme","Train","Avion","Aviation","protection",
+    "Communication", "Pêche","Immobilier","Immo","Sécurité","gardiennage","Cabinet","Avocat","Assurrance", "Crédit",
+    "Consultation","Laboratoire", "Analyse", "Médicale","Pharmaceutique", "Pharmaceutiques", "Médicaments","apprentissage","Transfert",
+    "Importation","Exportation","distribution","alimentaires","production", "transformation", "commercialisation","chips"
+]
+
 def is_person(result: str, company:str):
     name  = result.split("|")[0]
     no_space_company = company.replace(" ", "")
@@ -28,11 +43,11 @@ def process_linkedin(dbname: str) -> List[str]:
     filename  = f"generated/process_linkedin_contacts_{int(time.time())}.json"
     conn = psycopg2.connect(f"dbname={dbname} user=konnect password=secret123")
     curr = conn.cursor()
-    query = f"SELECT company_id, company_legal_name  FROM companies where company_legal_name < 'SINO AFRICA INTERNATIONAL MINING' order by company_legal_name;"
+    query = f"SELECT company_id, company_legal_name  FROM companies order by company_legal_name;"
     curr.execute(query)
-    for company_id, company_legal_name in curr.fetchall():
-        try:    
-            contacts = search_linkedin(company_id=company_id, company=company_legal_name)
+    for sector in COMPANY_SECTORS_KEY:
+        try:
+            contacts = search_linkedin(company_id=None, company=sector)
             if len(contacts) <= 0:
                 continue
             upload_contact_parsed(cur=curr, contacts=contacts, conn=conn)
@@ -52,9 +67,9 @@ def search_linkedin(company_id:str, company:str):
         ]
         contacts = [
             {
-                "contact_name": r.get("title").split("-")[0].strip(),
-                "contact_linkedin_url": r.get("href"),
-                "contact_role": r.get("title").split("-")[1].strip(),
+                "contact_name": r.get("title").split("-")[0].strip()[:255],
+                "contact_linkedin_url": r.get("href")[:255],
+                "contact_role": r.get("title").split("-")[1].strip()[:255],
                 "contact_email": None,
                 "contact_nationality": None,
                 "contact_phones": None,

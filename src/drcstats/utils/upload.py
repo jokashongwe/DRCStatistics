@@ -85,14 +85,24 @@ def upload_contact_parsed(cur, contacts, conn):
         nationality = contact.get('contact_nationality') if contact.get('contact_nationality') else ""
         if "né" in nationality:
             nationality = "CD"
-        query = f""" 
-            INSERT INTO public.contacts(
-            contact_id, contact_full_name, contact_phones, contact_email, contact_source, company_id,
-            contact_address, contact_role, contact_nationality, contact_linkedin_url)
-            VALUES ('{empty_contact_id}', '{remove_single_quote(contact_name)}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
-            '{contact.get("contact_email",'')}', 'LINKEDIN', '{contact.get('contact_company_id')}', '{address}', 
-            '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}');
-        """
+        if not contact.get('contact_company_id'):
+            query = f""" 
+                INSERT INTO public.contacts(
+                contact_id, contact_full_name, contact_phones, contact_email, contact_source,
+                contact_address, contact_role, contact_nationality, contact_linkedin_url)
+                VALUES ('{empty_contact_id}', '{remove_single_quote(contact_name)}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
+                '{contact.get("contact_email",'')}', 'LINKEDIN', '{address}', 
+                '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}');
+            """
+        else:
+            query = f""" 
+                INSERT INTO public.contacts(
+                contact_id, contact_full_name, contact_phones, contact_email, contact_source, company_id,
+                contact_address, contact_role, contact_nationality, contact_linkedin_url)
+                VALUES ('{empty_contact_id}', '{remove_single_quote(contact_name)}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
+                '{contact.get("contact_email",'')}', 'LINKEDIN', '{contact.get('contact_company_id')}', '{address}', 
+                '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}');
+            """
         cur.execute(query=query)
         progress_bar.update(progress_bar.value + 1)
     conn.commit()
