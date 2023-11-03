@@ -7,7 +7,8 @@ import time
 import random
 
 def remove_single_quote(string:str):
-    return string.replace("'", " ") if string else ""
+    result = string.replace("'", " ") if string else ""
+    return result.split("(")[0].strip()
 
 def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
     try:
@@ -79,12 +80,18 @@ def upload_contact_parsed(cur, contacts, conn):
     progress_bar.start()
     for contact in contacts:
         line = json.dumps(contact)
-        empty_contact_id =hashlib.md5(f"{line}{time.time() + random.randint(1, 1000)}".encode("utf-8")).hexdigest()
+        empty_contact_id =hashlib.md5(f"{line}".encode("utf-8")).hexdigest()
         contact_name = contact.get("contact_name").replace("'", "-") if contact.get("contact_name") else ''
         address = contact.get("contact_address").replace("'", " ") if contact.get("contact_address") else ''
         nationality = contact.get('contact_nationality') if contact.get('contact_nationality') else ""
         if "né" in nationality:
             nationality = "CD"
+        # check if exists
+        query = f"SELECT contact_id FROM contacts WHERE contact_id = '{empty_contact_id}'"
+        cur.execute(query)
+        contact_id = cur.fetchone()
+        if contact_id:
+            continue
         if not contact.get('contact_company_id'):
             query = f""" 
                 INSERT INTO public.contacts(
@@ -125,7 +132,7 @@ def upload_contact(filename: Path, dbname="connectcongo"):
             for line in lines:
                 current_line = line
                 contact = json.loads(line)
-                empty_contact_id =hashlib.md5(f"{line}{time.time() + random.randint(1, 1000)}".encode("utf-8")).hexdigest()
+                empty_contact_id =hashlib.md5(f"{line}".encode("utf-8")).hexdigest()
                 contact_name = contact.get("contact_name").replace("'", "-") if contact.get("contact_name") else ''
                 address = contact.get("contact_address").replace("'", " ") if contact.get("contact_address") else ''
                 birthday = contact.get('contact_birthday');
@@ -136,6 +143,12 @@ def upload_contact(filename: Path, dbname="connectcongo"):
                 nationality = contact.get('contact_nationality') if contact.get('contact_nationality') else ""
                 if "né" in nationality:
                     nationality = "CD"
+                # check if exists
+                query = f"SELECT contact_id FROM contacts WHERE contact_id = '{empty_contact_id}'"
+                cur.execute(query)
+                contact_id = cur.fetchone()
+                if contact_id:
+                    continue
                 query = f""" 
                     INSERT INTO public.contacts(
                     contact_id, contact_full_name, contact_phones, contact_email, contact_source, company_id,
