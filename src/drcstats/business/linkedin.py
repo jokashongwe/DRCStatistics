@@ -10,7 +10,6 @@ def is_person(result: str, company:str):
     no_space_company = company.replace(" ", "")
     return "-" in name and name != company and no_space_company != name
 
-
 def company_in_string(value: str, company: str):
     company = company.lower()
     no_space_company = company.replace(" ", "")

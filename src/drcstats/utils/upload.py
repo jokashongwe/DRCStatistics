@@ -89,9 +89,9 @@ def upload_contact_parsed(cur, contacts, conn):
             INSERT INTO public.contacts(
             contact_id, contact_full_name, contact_phones, contact_email, contact_source, company_id,
             contact_address, contact_role, contact_nationality, contact_linkedin_url)
-            VALUES ('{empty_contact_id}', '{contact_name}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
+            VALUES ('{empty_contact_id}', '{remove_single_quote(contact_name)}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
             '{contact.get("contact_email",'')}', 'LINKEDIN', '{contact.get('contact_company_id')}', '{address}', 
-            '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{contact.get('contact_linkedin_url')}');
+            '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}');
         """
         cur.execute(query=query)
         progress_bar.update(progress_bar.value + 1)
@@ -148,6 +148,6 @@ def upload_contact(filename: Path, dbname="connectcongo"):
 
 if __name__ == "__main__":
     current_folder = Path(__file__).parent
-    generated_folder = Path(current_folder.parent.parent.parent, "generated", "produced_guce_contact_1698999754.json")
+    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "produced_guce_contact_1698999754.json")
     # print("gen: ", generated_folder)
     upload_contact(generated_folder)
