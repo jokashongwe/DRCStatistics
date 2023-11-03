@@ -15,7 +15,7 @@ REPAIR_SCRIPTS = [
     """,
     """
     update public.companies 
-    set company_state=split_part('P/', 2)
+    set company_state=split_part(company_address, 'P/', 2)
     where company_state is null and company_address is not null and company_address != 'None'
     """
 ]
