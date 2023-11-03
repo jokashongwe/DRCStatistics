@@ -34,7 +34,8 @@ def process_linkedin(dbname: str) -> List[str]:
         contacts = []
         try:    
             contacts = search_linkedin(company_id=company_id, company=company_legal_name)
-        except:
+        except Exception as e:
+            print(e)
             continue
         if len(contacts) <= 0:
             continue
