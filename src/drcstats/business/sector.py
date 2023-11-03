@@ -11,9 +11,9 @@ COMPANY_SECTORS_KEY = [
     "Cuivre", "Cobalt", "Coltan", "Conseil", "Finance", "Banque", "Télécommunication","Fôret","bois","Alcool", "Bar",
     "Micro-finance", "Téléphonie", "Internet", "Réseaux","Paie", "Commerce","Mobile", "Transport",
     "Location", "Service", "Assistance", "Recherche", "Architecture", "Construction", "Bâtiment",
-    "Sport","Fitness", "Maquillage", "épillation", "Coiffure", "Club", "Equipements","électricité","Mécanique","réfection"
+    "Sport","Fitness", "Maquillage", "épillation", "Coiffure", "Club", "Equipements","électricité","Mécanique","réfection",
     "Fourniture", "Livraison", "Restaurant","Restauration", "Cuisine", "Ménager","nettoyage","Cleaning", "Réparation",
-    "Photographie", "Humour", "Spectacle", "Cinéma", "Art","Culture", "Formation","éducation", "Comptable", "Comptabilité"
+    "Photographie", "Humour", "Spectacle", "Cinéma", "Art","Culture", "Formation","éducation", "Comptable", "Comptabilité",
     "Fiscalité", "Gestion", "Export", "Fret", "Voyage","Tourisme","Train","Avion","Aviation","protection",
     "Communication", "Pêche","Immobilier","Immo","Sécurité","gardiennage","Cabinet","Avocat","Assurrance", "Crédit",
     "Consultation","Laboratoire", "Analyse", "Médicale","Pharmaceutique", "Pharmaceutiques", "Médicaments","apprentissage","Transfert",

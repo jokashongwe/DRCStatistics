@@ -31,13 +31,14 @@ def process_linkedin(dbname: str) -> List[str]:
     query = f"SELECT company_id, company_legal_name  FROM companies where company_legal_name < 'SINO AFRICA INTERNATIONAL MINING' order by company_legal_name;"
     curr.execute(query)
     for company_id, company_legal_name in curr.fetchall():
+        contacts = []
         try:    
             contacts = search_linkedin(company_id=company_id, company=company_legal_name)
-            if len(contacts) <= 0:
-                continue
-            upload_contact_parsed(cur=curr, contacts=contacts, conn=conn)
         except:
             continue
+        if len(contacts) <= 0:
+            continue
+        upload_contact_parsed(cur=curr, contacts=contacts, conn=conn)
     curr.close()
     conn.close()
 
