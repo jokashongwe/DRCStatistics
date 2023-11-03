@@ -7,3 +7,4 @@ progressbar2==4.2.0
 requests==2.31.0
 black
 requests==2.31.0
+psycopg2==2.9.9
