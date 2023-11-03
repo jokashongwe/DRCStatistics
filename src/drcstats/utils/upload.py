@@ -68,6 +68,35 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
     except Exception as error:
         print("current_line: ", current_line)
         raise error
+    
+def upload_contact_parsed(cur, contacts, conn):
+    progress_bar = progressbar.ProgressBar(min_value=0, max_value=len(contacts))
+    progress_bar.widgets = (
+        ["uploading lines: "]
+        + [progressbar.widgets.FileTransferSpeed(unit="contacts"), " "]
+        + progress_bar.default_widgets()
+    )
+    progress_bar.start()
+    for contact in contacts:
+        line = json.dumps(contact)
+        empty_contact_id =hashlib.md5(f"{line}{time.time() + random.randint(1, 1000)}".encode("utf-8")).hexdigest()
+        contact_name = contact.get("contact_name").replace("'", "-") if contact.get("contact_name") else ''
+        address = contact.get("contact_address").replace("'", " ") if contact.get("contact_address") else ''
+        nationality = contact.get('contact_nationality') if contact.get('contact_nationality') else ""
+        if "né" in nationality:
+            nationality = "CD"
+        query = f""" 
+            INSERT INTO public.contacts(
+            contact_id, contact_full_name, contact_phones, contact_email, contact_source, company_id,
+            contact_address, contact_role, contact_nationality, contact_linkedin_url)
+            VALUES ('{empty_contact_id}', '{contact_name}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
+            '{contact.get("contact_email",'')}', 'LINKEDIN', '{contact.get('contact_company_id')}', '{address}', 
+            '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{contact.get('contact_linkedin_url')}');
+        """
+        cur.execute(query=query)
+        progress_bar.update(progress_bar.value + 1)
+    conn.commit()
+    progress_bar.finish()
 
 def upload_contact(filename: Path, dbname="connectcongo"):
     try:
