@@ -54,9 +54,9 @@ def search_linkedin(company_id:str, company:str):
         ]
         contacts = [
             {
-                "contact_name": r.get("title").split("-")[0].strip(),
-                "contact_linkedin_url": r.get("href"),
-                "contact_role": r.get("title").split("-")[1].strip(),
+                "contact_name": r.get("title").split("-")[0].strip()[:244],
+                "contact_linkedin_url": r.get("href")[:255],
+                "contact_role": r.get("title").split("-")[1].strip()[:244],
                 "contact_email": None,
                 "contact_nationality": None,
                 "contact_phones": None,
