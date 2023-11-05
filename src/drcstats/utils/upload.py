@@ -55,7 +55,7 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
                         VALUES ('{company.get("company_id")}', '{company.get("company_legal_name")}', '{company.get("company_city", 'Kinshasa')}', 
                         '{company.get("company_state", '')}', '{remove_single_quote(company.get("company_alternative_name"))}', 
                         '{json.dumps(sectors, ensure_ascii=False)}', '{remove_single_quote(address)}', '{company.get("company_domain", '')}', 
-                        'GUCE', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
+                        'FC', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
                         TO_DATE('{company.get("company_creation_date") if company.get("company_creation_date") else '2023-11-02' }', 'YYYY-MM-DD'), '{remove_single_quote(company.get("company_legal_form", ''))}',
                         '{remove_single_quote(company.get("company_description",''))}', '{company.get("company_category")}' );
                     """
