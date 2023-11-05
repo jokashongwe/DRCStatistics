@@ -52,7 +52,7 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
                         company_state, company_alternative_name, company_sectors, 
                         company_address, company_domain, company_source, company_capital, 
                         company_rccm, company_tax_number,company_creation_date,company_legal_form, company_desc,company_category)
-                        VALUES ('{company.get("company_id")}', '{company.get("company_legal_name")}', '{company.get("company_city", 'Kinshasa')}', 
+                        VALUES ('{empty_company_id}', '{company.get("company_legal_name")}', '{company.get("company_city", 'Kinshasa')}', 
                         '{company.get("company_state", '')}', '{remove_single_quote(company.get("company_alternative_name"))}', 
                         '{json.dumps(sectors, ensure_ascii=False)}', '{remove_single_quote(address)}', '{company.get("company_domain", '')}', 
                         'FC', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
