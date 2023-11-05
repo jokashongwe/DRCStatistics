@@ -66,9 +66,8 @@ def search_linkedin(company_id:str, company:str):
             }
             for r in results
         ]
-        print(contacts)
         print(f"{len(contacts)} contacts found for company: {company}")
         return contacts
 
 if __name__ == "__main__":
-    search_linkedin(company_id=None, company="Vodacom DRC")
+    process_linkedin(dbname="connectcongo")
