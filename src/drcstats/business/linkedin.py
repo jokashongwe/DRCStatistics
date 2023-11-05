@@ -55,8 +55,9 @@ def process_linkedin_for_contact(dbname: str, query_results: tuple=None, query:s
             with DDGS() as ddgs:
                 results = [r for r in ddgs.text(f"{contact_full_name}", max_results=50) if fuzz.partial_ratio(contact_full_name, r.get('title')) >= 60]
                 contact_links = [{'title': r.get('title'), 'link': r.get("href")} for r in results]
+                contact_value = json.dumps(contact_links[:5], ensure_ascii=False).replace("'", "")
                 if results:
-                    curr.execute(f"UPDATE contacts set contact_links = '{json.dumps(contact_links[:5], ensure_ascii=False).replace("'", "")}' where contact_id = '{contact_id}'")
+                    curr.execute(f"UPDATE contacts set contact_links = '{contact_value}' where contact_id = '{contact_id}';")
                     conn.commit()
                 else:
                     print(f"No result for: {contact_full_name}")
