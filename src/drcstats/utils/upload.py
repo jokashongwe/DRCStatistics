@@ -171,6 +171,6 @@ def upload_contact(filename: Path, dbname="connectcongo"):
 
 if __name__ == "__main__":
     current_folder = Path(__file__).parent
-    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "produced_guce_contact_1698999754.json")
+    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "produced_fec_company_1697796196.json")
     # print("gen: ", generated_folder)
-    upload_contact(generated_folder)
+    upload_company(generated_folder)

@@ -28,7 +28,7 @@ def process_linkedin(dbname: str) -> List[str]:
     filename  = f"generated/process_linkedin_contacts_{int(time.time())}.json"
     conn = psycopg2.connect(f"dbname={dbname} user=konnect password=secret123")
     curr = conn.cursor()
-    query = f"SELECT company_id, company_alternative_name FROM companies WHERE company_alternative_name != '' order by company_alternative_name asc;"
+    query = f"SELECT company_id, company_legal_name FROM companies WHERE company_source = 'FEC' order by company_legal_name asc;"
     curr.execute(query)
     for company_id, company_legal_name in curr.fetchall():
         contacts = []
