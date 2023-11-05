@@ -28,7 +28,7 @@ def process_linkedin(dbname: str) -> List[str]:
     filename  = f"generated/process_linkedin_contacts_{int(time.time())}.json"
     conn = psycopg2.connect(f"dbname={dbname} user=konnect password=secret123")
     curr = conn.cursor()
-    query = f"SELECT company_id, company_legal_name FROM companies WHERE company_source = 'FC' order by company_legal_name asc;"
+    query = f"SELECT company_id, company_legal_name FROM companies WHERE company_source = 'HYDRO' order by company_legal_name asc;"
     curr.execute(query)
     for company_id, company_legal_name in curr.fetchall():
         contacts = []
@@ -48,7 +48,7 @@ def search_linkedin(company_id:str, company:str):
     with DDGS() as ddgs:
         results = [
             r
-            for r in ddgs.text(f"{company} rdc linkedin", max_results=50)
+            for r in ddgs.text(f"{company} rdc linkedin", max_results=100)
             if is_person(r.get("title"), company=company)
             and (company_in_string(value=r.get("title"), company=company) or company_in_string(value=r.get("body"), company=company))
         ]
@@ -66,8 +66,9 @@ def search_linkedin(company_id:str, company:str):
             }
             for r in results
         ]
+        print(contacts)
         print(f"{len(contacts)} contacts found for company: {company}")
         return contacts
 
 if __name__ == "__main__":
-    process_linkedin(dbname="connectcongo")
+    search_linkedin(company_id=None, company="Vodacom DRC")

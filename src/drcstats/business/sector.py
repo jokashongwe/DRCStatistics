@@ -18,7 +18,11 @@ COMPANY_SECTORS_KEY = [
     "Communication", "Pêche","Immobilier","Immo","Sécurité","gardiennage","Cabinet","Avocat","Assurrance", "Crédit",
     "Consultation","Laboratoire", "Analyse", "Médicale","Pharmaceutique", "Pharmaceutiques", "Médicaments","apprentissage","Transfert",
     "Importation","Exportation","distribution","alimentaires","production", "transformation", "commercialisation","chips","Développeur",
-    "CVM", "CVS", "CEO"
+    "CVM", "CVS", "CEO","Géologue","Géographe", "Pasteur","Animateur","Formateur","Professeur","Ingénieur"
+]
+
+VIP_COMPANIES = [
+    
 ]
 
 def is_person(result: str, company:str):

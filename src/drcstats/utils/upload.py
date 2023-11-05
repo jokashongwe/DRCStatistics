@@ -26,7 +26,7 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
             progress_bar.start()
             keys = []
             for line in lines:
-                current_line = line
+                current_line = line.strip()
                 company = json.loads(line)
                 empty_company_id = hashlib.md5(f"{line}".encode("utf-8")).hexdigest()
                 if empty_company_id in keys or not empty_company_id:
@@ -52,10 +52,10 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
                         company_state, company_alternative_name, company_sectors, 
                         company_address, company_domain, company_source, company_capital, 
                         company_rccm, company_tax_number,company_creation_date,company_legal_form, company_desc,company_category)
-                        VALUES ('{empty_company_id}', '{company.get("company_legal_name")}', '{company.get("company_city", 'Kinshasa')}', 
+                        VALUES ('{empty_company_id}', '{remove_single_quote(company.get("company_legal_name"))}', '{company.get("company_city", 'Kinshasa')}', 
                         '{company.get("company_state", '')}', '{remove_single_quote(company.get("company_alternative_name"))}', 
                         '{json.dumps(sectors, ensure_ascii=False)}', '{remove_single_quote(address)}', '{company.get("company_domain", '')}', 
-                        'FC', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
+                        'HYDRO', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
                         TO_DATE('{company.get("company_creation_date") if company.get("company_creation_date") else '2023-11-02' }', 'YYYY-MM-DD'), '{remove_single_quote(company.get("company_legal_form", ''))}',
                         '{remove_single_quote(company.get("company_description",''))}', '{company.get("company_category")}' );
                     """
@@ -171,6 +171,6 @@ def upload_contact(filename: Path, dbname="connectcongo"):
 
 if __name__ == "__main__":
     current_folder = Path(__file__).parent
-    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "produced_fec_company_1697796196.json")
+    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "minihydro.json")
     # print("gen: ", generated_folder)
     upload_company(generated_folder)

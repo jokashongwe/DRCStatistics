@@ -8,6 +8,9 @@ REPAIR_SCRIPTS = [
     "update public.companies set company_city=null where company_city = '';",
     "update public.contacts set contact_email=null where contact_email = 'None';",
     "update public.contacts set contact_address=null where contact_address = '';",
+    "delete from contacts where contact_full_name ilike '%:%';",
+    "delete from contacts where contact_full_name ilike '%#%';",
+    "delete from contacts where contact_full_name ilike '%*%';",
     """
     update public.companies 
     set company_city=split_part(split_part(company_address,'V/', 2), ', P/', 1)
