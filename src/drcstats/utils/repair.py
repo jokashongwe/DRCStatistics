@@ -3,6 +3,7 @@ import psycopg2
 
 REPAIR_SCRIPTS = [
     "update public.companies set company_domain=null where company_domain = 'None';",
+    "update public.companies set company_category=null where company_category = 'None';",
     "update public.companies set company_state=null where company_state = 'None';",
     "update public.companies set company_city=null where company_city = 'None';",
     "update public.companies set company_city=null where company_city = '';",
