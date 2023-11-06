@@ -59,7 +59,7 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
                         VALUES ('{empty_company_id}', '{remove_single_quote(company.get("company_legal_name"))}', '{company.get("company_city", 'Kinshasa')}', 
                         '{company.get("company_state", '')}', '{remove_single_quote(company.get("company_alternative_name"))}', 
                         '{json.dumps(sectors, ensure_ascii=False)}', '{remove_single_quote(address)}', '{company.get("company_domain", '')}', 
-                        'ARSP', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
+                        'PNET', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
                         TO_DATE('{company.get("company_creation_date") if company.get("company_creation_date") else '2023-11-02' }', 'YYYY-MM-DD'), '{remove_single_quote(company.get("company_legal_form", ''))}',
                         '{remove_single_quote(company.get("company_description",''))}', '{company.get("company_category")}' );
                     """
@@ -175,6 +175,6 @@ def upload_contact(filename: Path, dbname="connectcongo"):
 
 if __name__ == "__main__":
     current_folder = Path(__file__).parent
-    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "arsp.json")
+    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "public_companies.json")
     # print("gen: ", generated_folder)
     upload_company(generated_folder)

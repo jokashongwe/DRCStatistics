@@ -97,6 +97,6 @@ def search_linkedin(company_id: str, company: str, suffix="RDC"):
 
 
 if __name__ == "__main__":
-    query = query = f"SELECT company_id, company_legal_name FROM companies WHERE company_source = 'ARSP' order by company_legal_name asc;"
-    # process_linkedin(dbname="connectcongo", query=query)
-    process_linkedin_for_contact(dbname="connectcongo")
+    query = query = f"SELECT company_id, company_legal_name FROM companies WHERE company_source = 'PNET' order by company_legal_name asc;"
+    process_linkedin(dbname="connectcongo", query=query)
+    #process_linkedin_for_contact(dbname="connectcongo")

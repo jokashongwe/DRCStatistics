@@ -21,9 +21,6 @@ COMPANY_SECTORS_KEY = [
     "CVM", "CVS", "CEO","Géologue","Géographe", "Pasteur","Animateur","Formateur","Professeur","Ingénieur"
 ]
 
-VIP_COMPANIES = [
-    
-]
 
 def is_person(result: str, company:str):
     name  = result.split("|")[0]
