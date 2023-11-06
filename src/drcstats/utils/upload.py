@@ -10,6 +10,47 @@ def remove_single_quote(string:str):
     result = string.replace("'", " ") if string else ""
     return result.split("(")[0].strip()
 
+
+def upload_one_company(company: dict, curr):
+    cur = curr
+    location  = company.get("company_location")
+    sectors = company.get("company_sectors")
+    address = company.get("company_address")
+    company_social_links = company.get("company_social_links")
+    if location:
+        company['company_city'] = location.split('-')[0].strip()
+        company['company_state'] = location.split('-')[-1].strip()
+    empty_company_id = company.get("company_id")
+    if not empty_company_id:
+        empty_company_id = hashlib.md5(f"{json.dumps(company)}".encode("utf-8")).hexdigest()
+    query = f""" 
+        INSERT INTO public.companies(
+        company_id, company_legal_name, company_city, 
+        company_state, company_alternative_name, company_sectors,company_social_links, 
+        company_address, company_domain, company_source, company_capital, 
+        company_rccm, company_tax_number,company_creation_date,company_legal_form, company_desc,company_category, company_country)
+        VALUES ('{empty_company_id}', '{remove_single_quote(company.get("company_legal_name"))}', '{company.get("company_city", '')}', 
+        '{company.get("company_state", '')}', '{remove_single_quote(company.get("company_alternative_name"))}', 
+        '{json.dumps(sectors, ensure_ascii=False)}', '{json.dumps(company_social_links, ensure_ascii=False)}', '{remove_single_quote(address)}', '{company.get("company_domain", '')}', 
+        'PNET', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
+        TO_DATE('{company.get("company_creation_date") if company.get("company_creation_date") else '1960-01-01' }', 'YYYY-MM-DD'), '{remove_single_quote(company.get("company_legal_form", ''))}',
+        '{remove_single_quote(company.get("company_description",''))}', '{company.get("company_category", "")}','{company.get("company_country")}' );
+    """
+    cur.execute(query=query)
+
+
+def upload_one_contact(contact: dict, company_id: str, curr):
+    cur = curr
+    phones = json.dumps(contact.get("contact_phones")).replace("'", "\"") if contact.get("contact_phones") else []
+    empty_contact_id =hashlib.md5(f"{json.dumps(contact)}".encode("utf-8")).hexdigest()
+    contact_name = contact.get('contact_name').replace("'", " ") if contact.get('contact_name') else ''
+    query = f""" 
+        INSERT INTO public.contacts(
+        contact_id, contact_full_name, contact_phones,contact_role,contact_email, contact_source, company_id, contact_address, contact_desc,contact_country)
+        VALUES ('{empty_contact_id}', '{contact_name}', '{phones}', '{remove_single_quote(contact.get('contact_role'))}', '{contact.get("contact_email")}', 'PNET', '{company_id}', null, '{remove_single_quote(contact.get('contact_description'))}', '{contact.get("contact_country")}');
+        """
+    cur.execute(query=query)
+
 def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
     try:
         current_line = None
