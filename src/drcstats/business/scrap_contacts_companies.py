@@ -5,6 +5,7 @@ from src.drcstats.utils.upload import upload_one_company, upload_one_contact
 import hashlib
 import progressbar
 import psycopg2
+from fuzzywuzzy import fuzz
 
 def get_list_of(path: str):
     result_list = []
@@ -12,8 +13,8 @@ def get_list_of(path: str):
         result_list = file.readlines()
     return result_list
 
-def is_exist(object_id:str, field: str, table:str, cur):
-    query = f"SELECT {field} FROM {table} WHERE {field} = '{object_id}'"
+def is_exist(object_id:str, field: str, table:str, cur,  country:str):
+    query = f"SELECT {field} FROM {table} WHERE {field} = '{object_id}' and {country}"
     cur.execute(query=query)
     result = cur.fetchone()
     return True if result else False
@@ -59,34 +60,44 @@ def companies_scrap():
                             }
                         else:
                             title_parts = title.split("-")
-                            if len(title_parts) == 3:
+                            if len(title_parts) == 2:
+                                continue
+                            elif len(title_parts) > 2:
                                 company_name = (
-                                    title_parts[-1]
+                                    title_parts[2]
                                     .lower()
                                     .replace("linkedin", "")
                                     .replace("|", "")
                                     .strip()
                                     .capitalize()
                                 )
-                                company = {
-                                    "company_legal_name": company_name,
-                                    "company_social_links": [link],
-                                    "company_sectors": job.split(" "),
-                                    "company_country": country,
-                                }
-                                contact = {
-                                    "contact_full_name": title_parts[0],
-                                    "contact_description": result.get('body'),
-                                    "contact_role": title_parts[1].strip(),
-                                    "contact_country": country
-                                }
-                                contact['contact_id'] =hashlib.md5(f"{json.dumps(contact)}".encode("utf-8")).hexdigest()
+                                if fuzz.ratio(company_name, job) > 90 or not company_name:
+                                    continue
+                            company = {
+                                "company_legal_name": company_name,
+                                "company_social_links": [link],
+                                "company_description": result.get("body"),
+                                "company_sectors": job.split(" "),
+                                "company_country": country,
+                            }
+                            contact = {
+                                "contact_name": title_parts[0],
+                                "contact_description": result.get('body'),
+                                "contact_role": title_parts[1].strip(),
+                                "contact_country": country
+                            }
+                            contact['contact_id'] =hashlib.md5(f"{json.dumps(contact)}".encode("utf-8")).hexdigest()
+                            
+
                             if not company:
                                 continue
                             company['company_id'] = hashlib.md5(f"{json.dumps(company)}".encode("utf-8")).hexdigest()
-                            if not is_exist(object_id=company.get('company_id'), field="company_id", table="companies", cur=cur):
+                            print("Company: ", company)
+                            print("Contact: ", contact)
+                            raise
+                            if not is_exist(object_id=company.get('company_legal_name'), field="company_legal_name", table="companies", cur=cur, country=f"company_country = '{country}'"):
                                 upload_one_company(company=company, curr=cur) if company else None
-                            if not is_exist(object_id=contact.get('contact_id'), field="contact_id", table="contacts", cur=cur):
+                            if not is_exist(object_id=contact.get('contact_id'), field="contact_id", table="contacts", cur=cur,  country=f"contact_country = '{country}'"):
                                 upload_one_contact(contact=contact, company_id=company['company_id'], curr=cur) if contact else None
                     except Exception as e:
                         continue

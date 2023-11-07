@@ -12,6 +12,8 @@ def remove_single_quote(string:str):
 
 
 def upload_one_company(company: dict, curr):
+    if not company.get('company_legal_name'):
+        return
     cur = curr
     location  = company.get("company_location")
     sectors = company.get("company_sectors")
@@ -40,6 +42,8 @@ def upload_one_company(company: dict, curr):
 
 
 def upload_one_contact(contact: dict, company_id: str, curr):
+    if not contact.get('contact_full_name'):
+        return
     cur = curr
     phones = json.dumps(contact.get("contact_phones")).replace("'", "\"") if contact.get("contact_phones") else []
     empty_contact_id =hashlib.md5(f"{json.dumps(contact)}".encode("utf-8")).hexdigest()
