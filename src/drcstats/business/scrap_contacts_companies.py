@@ -33,7 +33,6 @@ def parse_company_name(value: str):
 
 def companies_scrap():
     countries = get_list_of(path="Raw/african_countries_list.txt")
-    countries.reverse()
     jobs_list = get_list_of(path="Raw/jobs_list.txt")
     for country in countries:
         country = country.strip()
