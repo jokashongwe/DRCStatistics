@@ -24,6 +24,7 @@ def companies_scrap():
     jobs_list = get_list_of(path="Raw/jobs_list.txt")
     for country in countries:
         country = country.strip()
+        print("Country: ", country)
         progress_bar = progressbar.ProgressBar(min_value=0, max_value=len(jobs_list))
         progress_bar.widgets = (
             ["uploading lines: "]
