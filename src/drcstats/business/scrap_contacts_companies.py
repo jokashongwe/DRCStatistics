@@ -87,13 +87,13 @@ def companies_scrap():
                             company = {
                                 "company_legal_name": remove_single_quote(company_name),
                                 "company_social_links": [urllib.parse.quote(link)],
-                                "company_description": remove_single_quote(result.get("body")),
+                                "company_description": "",
                                 "company_sectors": job.split(" "),
                                 "company_country": country,
                             }
                             contact = {
                                 "contact_name": title_parts[0],
-                                "contact_description": result.get("body"),
+                                "contact_description": remove_single_quote(result.get("body")),
                                 "contact_role": title_parts[1].strip(),
                                 "contact_linked_url": link,
                                 "contact_country": country,
