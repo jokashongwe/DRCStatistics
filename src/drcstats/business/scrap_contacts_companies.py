@@ -93,9 +93,6 @@ def companies_scrap():
                             if not company:
                                 continue
                             company['company_id'] = hashlib.md5(f"{json.dumps(company)}".encode("utf-8")).hexdigest()
-                            print("Company: ", company)
-                            print("Contact: ", contact)
-                            raise
                             if not is_exist(object_id=company.get('company_legal_name'), field="company_legal_name", table="companies", cur=cur, country=f"company_country = '{country}'"):
                                 upload_one_company(company=company, curr=cur) if company else None
                             if not is_exist(object_id=contact.get('contact_id'), field="contact_id", table="contacts", cur=cur,  country=f"contact_country = '{country}'"):
