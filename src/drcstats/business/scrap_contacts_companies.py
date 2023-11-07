@@ -102,27 +102,31 @@ def companies_scrap():
                             ).hexdigest()
                         if not company:
                             continue
-                        if not company.get("company_legal_name"):
+                    
+                        company_name =  company.get("company_legal_name")
+                        if not company_name:
                             continue
                         company["company_id"] = hashlib.md5(
                             f"{json.dumps(company)}".encode("utf-8")
                         ).hexdigest()
+                        
                         company_exists = is_exist(
-                            object_id=company.get("company_legal_name"),
+                            object_id=company_name,
                             field="company_id, company_legal_name",
                             table="companies",
                             cur=cur,
-                            where_expr=f"company_legal_name = '{company.get("company_legal_name")}' AND company_country = '{country}'",
+                            where_expr=f"company_legal_name = '{company_name}' AND company_country = '{country}'",
                         )
                         # print("\nResult company: ", company_exists)
                         if company and not company_exists:
                             upload_one_company(company=company, curr=cur)
+                        contact_id = contact.get("contact_id")
                         contact_exists = is_exist(
                             object_id=contact.get("contact_id"),
                             field="contact_id, contact_full_name",
                             table="contacts",
                             cur=cur,
-                            where_expr=f"contact_id = '{contact.get("contact_id")}'",
+                            where_expr=f"contact_id = '{contact_id}'",
                         ) if contact else None
                         # print(f"\nContact_id: {contact.get("contact_id")}\nContact_exists: ", contact_exists) if contact else None
                         if contact and contact.get('contact_name') and not contact_exists:
