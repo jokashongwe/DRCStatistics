@@ -95,7 +95,7 @@ def companies_scrap():
                                 "contact_name": title_parts[0],
                                 "contact_description": remove_single_quote(result.get("body")),
                                 "contact_role": title_parts[1].strip(),
-                                "contact_linked_url": link,
+                                "contact_linkedin_url": link,
                                 "contact_country": country,
                             }
                             contact["contact_id"] = hashlib.md5(
