@@ -48,8 +48,8 @@ def upload_one_contact(contact: dict, company_id: str, curr):
     contact_name = contact.get('contact_name').replace("'", " ") if contact.get('contact_name') else ''
     query = f""" 
         INSERT INTO public.contacts(
-        contact_id, contact_full_name, contact_phones,contact_role,contact_email, contact_source, company_id, contact_address, contact_desc,contact_country)
-        VALUES ('{empty_contact_id}', '{contact_name}', null, '{remove_single_quote(contact.get('contact_role'))}', '{contact.get("contact_email")}', 'PNET', '{company_id}', null, '{remove_single_quote(contact.get('contact_description'))}', '{contact.get("contact_country")}');
+        contact_id, contact_full_name, contact_phones,contact_role,contact_email, contact_source, company_id, contact_address, contact_desc,contact_country, contact_linkedin_url)
+        VALUES ('{empty_contact_id}', '{contact_name}', null, '{remove_single_quote(contact.get('contact_role'))}', '{contact.get("contact_email")}', 'PNET', '{company_id}', null, '{remove_single_quote(contact.get('contact_description'))}', '{contact.get("contact_country")}', '{contact.get('contact_linkedin_url')}');
         """
     cur.execute(query=query)
 
