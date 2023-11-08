@@ -57,7 +57,7 @@ def companies_scrap():
             cur = conn.cursor()
             with DDGS() as ddgs:
                 keyword = f"{job} {country} Linkedin".strip()
-                for result in ddgs.text(keyword, max_results=1000):
+                for result in ddgs.text(keyword, max_results=100):
                     try:
                         link = result.get("href")
                         title = result.get("title")

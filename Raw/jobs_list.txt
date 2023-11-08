@@ -1,8 +1,7 @@
 Accounting 
-apprentice
 Accountant
 Auditor
-Business administration apprentice
+Business administration
 School administrator
 Financial advisor
 Aerospace engineer
@@ -11,7 +10,7 @@ Air ambulance pilot
 Aircraft engineer
 Alpine ski racer
 Ambulance dispatcher
-Trainee business analyst
+business analyst
 Application developer
 Architectural assistant
 Architect
@@ -50,7 +49,7 @@ Civil engineer technician
 Civil engineering apprentice
 Cleaner
 Clinical photographer
-Trainee clinical psychologist
+clinical psychologist
 Rugby coach apprentice
 Coastguard – maritime operations officer
 Coder
@@ -101,7 +100,6 @@ Apprentice wing designer
 Garden designer
 Graphic designer
 User experience designer
-Trainee detective
 App developer
 Software developer
 Business development intern
@@ -158,7 +156,6 @@ Field technician
 Film director
 Freelance filmmaker
 Filmmaker sports
-Filmmaker and vlogger
 Financial service administrator
 Firefighter apprentice
 Firefighter in London
@@ -166,7 +163,6 @@ Firefighter in Nottingham
 Firefighter in Wales
 Florist
 Foley artist
-Chef and food vlogger
 Food and drink project planner
 Forensic scientist
 Front of house usher
@@ -209,21 +205,16 @@ Make up lead: TV
 Management accountant
 Engagement manager
 Operations manager
-Lewis Capaldi’s artist manager
 Process optimisation manager
-Production manager:
-Jasmine’s story
+Production manager
 Assistant restaurant manager
 Sales performance manager
 Social brand manager
 Stage manager for BBC Introducing Stage
 Stage manager at festivals
 Managing director of a start-up company
-Maritime operations officer for Her Majesty’s Coastguard
 Marketing manager
 Digital marketing apprentice
-Digital marketing assistant: Jack’s story
-Digital marketing assistant: Vanessa’s story
 Digital marketing specialist
 Digital marketing entrepreneur
 Digital marketing exec
@@ -233,9 +224,7 @@ Apprentice mechanic
 Mortgage advisor
 Motorbike mechanic
 Mechanical engineer
-Medical student:
-Kestra’s story who’s training to be a doctor
-Khadija’s story as an StreetDoctor intern
+Medical student
 Medicine management technician
 Member of Youth Parliament
 Mineral technology apprentice
@@ -255,7 +244,6 @@ Music supervisor
 Musician
 Nanny
 Naval architect
-News editor: online sports
 News reporter
 Nurse
 Critical care nurse
@@ -273,7 +261,6 @@ Orthotist
 Outreach officer at a youth club
 Outreach officer in the fire service
 Outreach pastor
-P
 Paper maker
 Paralegal apprentice
 Paramedic
@@ -281,7 +268,6 @@ Community specialist paramedic
 HART paramedic
 Urgent desk care paramedic
 Party planner
-PPC (Pay Per Click) trainer
 Writer performer and translator
 Personal trainer
 Pet food business owner
@@ -300,20 +286,17 @@ Police officer
 Police sergeant
 Politician
 Portuguese and Spanish translator
-Post-production: CGI
 Presenter
 Press office assistant
 Press officer for the North West Ambulance Service
-Primary teacher: Toby’s story
-Primary teacher: Hollie’s story
 Producer
 Associate producer
-Trainee producer
+producer
 Production manager
 Production assistant
 Product designer
 Professional gamer
-Trainee prop hand
+prop hand
 Prop maker
 Prosthetic makeup artist
 Prosthetist
@@ -333,7 +316,6 @@ Cyber security reporter
 Jobs in research
 Research scientist and PhD student
 Media researcher
-Media researcher: TV
 Senior researcher
 Science student and researcher
 Senior research manager
@@ -350,11 +332,9 @@ Secretary
 Zero waste shopkeeper
 Silversmith
 Singer-songwriter Jade Bird
-Lewis Capaldi singer-songwriter
 Ski racer
 Social media chef
 Social worker
-Songwriter for Kylie
 Software engineer
 Software engineer apprentice
 Solar farm manager
@@ -362,12 +342,9 @@ Soldier
 Junior soldier
 Solicitor (apprentice)
 Solicitor (civil law)
-Trainee solicitor
+solicitor
 Sonographer
-Sound engineer:
-Matilda’s story
-Paul’s story
-Raphael’s story
+Sound engineer
 Sport psychologist
 Stage manager for the BBC Introducing Stage
 Strategist
@@ -392,10 +369,11 @@ TV presenter
 Urgent care desk paramedic
 Veterinary nurse
 Veterinary surgeon
-Trainee vision supervisor
+vision supervisor
 Visual effects artist
 Wardrobe assistant
 Waste warrior
 Web developer
 Wedding dress designer
 Zoologist
+HR

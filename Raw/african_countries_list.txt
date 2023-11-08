@@ -1,5 +1,4 @@
 Eritrea
-Eswatini
 Ethiopia
 Gabon
 Gambia
@@ -29,6 +28,7 @@ Somalia
 South Africa
 South Sudan
 Sudan
+Swaziland
 Tchad
 Togo
 Tunisia
