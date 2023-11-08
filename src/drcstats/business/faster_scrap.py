@@ -20,7 +20,7 @@ THREADS = 5
 BUCKET = 5
 THREADS_WORKERS = 5
 THREADS_BUCKET = 5
-RESULTS = 200
+RESULTS = 400
 
 
 def get_list_of(path: str):
