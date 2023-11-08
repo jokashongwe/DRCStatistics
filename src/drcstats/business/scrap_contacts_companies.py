@@ -19,6 +19,10 @@ def get_list_of(path: str):
         result_list = file.readlines()
     return result_list
 
+def parse_string(value:str):
+    string_arr = [e for e in value if e.isalnum() or e == ' ']
+    return (''.join(string_arr)).strip()
+
 
 def is_exist(object_id: str, field: str, where_expr: str, table: str, cur, country: str=''):
     query = f"SELECT {field} FROM {table} WHERE {where_expr};"
@@ -28,7 +32,7 @@ def is_exist(object_id: str, field: str, where_expr: str, table: str, cur, count
 
 
 def parse_company_name(value: str):
-    return value.lower().replace("linkedin", "").replace("|", "").strip().capitalize()
+    return parse_string(value.lower().replace("linkedin", "").replace("|", "").strip().capitalize())
 
 
 def companies_scrap():
@@ -91,10 +95,10 @@ def companies_scrap():
                                 "company_country": country,
                             }
                             contact = {
-                                "contact_name": title_parts[0],
+                                "contact_name": parse_string(title_parts[0]),
                                 "contact_description": remove_single_quote(result.get("body")),
-                                "contact_role": title_parts[1].strip(),
-                                "contact_linkedin_url": link,
+                                "contact_role": parse_string(title_parts[1].strip()),
+                                "contact_linkedin_url": urllib.parse.quote(link),
                                 "contact_country": country,
                             }
                             contact["contact_id"] = hashlib.md5(
@@ -146,3 +150,4 @@ def companies_scrap():
 
 if __name__ == "__main__":
     companies_scrap()
+    #print(parse_string("Special $#! characters + ...  spaces 888323"))

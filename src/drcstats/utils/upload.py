@@ -98,13 +98,13 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
                         company_id, company_legal_name, company_city, 
                         company_state, company_alternative_name, company_sectors, 
                         company_address, company_domain, company_source, company_capital, 
-                        company_rccm, company_tax_number,company_creation_date,company_legal_form, company_desc,company_category)
+                        company_rccm, company_tax_number,company_creation_date,company_legal_form, company_desc,company_category, company_country)
                         VALUES ('{empty_company_id}', '{remove_single_quote(company.get("company_legal_name"))}', '{company.get("company_city", 'Kinshasa')}', 
                         '{company.get("company_state", '')}', '{remove_single_quote(company.get("company_alternative_name"))}', 
                         '{json.dumps(sectors, ensure_ascii=False)}', '{remove_single_quote(address)}', '{company.get("company_domain", '')}', 
                         'PNET', '{company.get("company_capital", '')}', '{company.get("company_rccm", '')}', '{company.get("company_tax_number", '')}', 
                         TO_DATE('{company.get("company_creation_date") if company.get("company_creation_date") else '2023-11-02' }', 'YYYY-MM-DD'), '{remove_single_quote(company.get("company_legal_form", ''))}',
-                        '{remove_single_quote(company.get("company_description",''))}', '{company.get("company_category")}' );
+                        '{remove_single_quote(company.get("company_description",''))}', '{company.get("company_category")}', 'Democratic Republic of the Congo' );
                     """
                 cur.execute(query=query)
                 progress_bar.update(progress_bar.value + 1)
@@ -199,10 +199,10 @@ def upload_contact(filename: Path, dbname="connectcongo"):
                 query = f""" 
                     INSERT INTO public.contacts(
                     contact_id, contact_full_name, contact_phones, contact_email, contact_source, company_id,
-                    contact_address, contact_role, contact_nationality, contact_birthday)
+                    contact_address, contact_role, contact_nationality, contact_birthday, contact_country)
                     VALUES ('{empty_contact_id}', '{contact_name}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
                     '{contact.get("contact_email",'')}', 'GUCE', '{contact.get('contact_company_id')}', '{address}', 
-                    '{remove_single_quote(contact.get('contact_role'))}', '{nationality}',TO_DATE('{birthday}', 'DD/MM/YYYY'));
+                    '{remove_single_quote(contact.get('contact_role'))}', '{nationality}',TO_DATE('{birthday}', 'DD/MM/YYYY'), 'Democratic Republic of the Congo');
                 """
                 cur.execute(query=query)
                 progress_bar.update(progress_bar.value + 1)
@@ -218,6 +218,14 @@ def upload_contact(filename: Path, dbname="connectcongo"):
 
 if __name__ == "__main__":
     current_folder = Path(__file__).parent
-    generated_folder = Path(current_folder.parent.parent.parent, "uploads", "public_companies.json")
-    # print("gen: ", generated_folder)
-    upload_company(generated_folder)
+    upload_list = ["public_companies.json", "minihydro.json","arsp.json","produced_guce_company_1698999754.json", "produced_fec_company_1697796196.json"]
+    for company_filename in upload_list:
+        generated_folder = Path(current_folder.parent.parent.parent, "uploads", company_filename)
+        # print("gen: ", generated_folder)
+        upload_company(generated_folder)
+    contact_uploads = ["produced_guce_contact_1698999754.json", "produced_fec_contact_1697796196.json"]
+    for contact_filename in contact_uploads:
+        generated_folder = Path(current_folder.parent.parent.parent, "uploads", contact_filename)
+        # print("gen: ", generated_folder)
+        upload_contact(generated_folder)
+
