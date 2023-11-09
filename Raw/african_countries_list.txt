@@ -8,7 +8,7 @@ Cameroon
 Cabo Verde
 Central African Republic
 Comoros
-Congo
+Republic of Congo
 Democratic Republic of the Congo
 Côte d'ivoire
 Djibouti
@@ -49,6 +49,6 @@ Tchad
 Togo
 Tunisia
 Uganda
-United Republic of Tanzania
+Tanzania
 Zambia
 Zimbabwe
