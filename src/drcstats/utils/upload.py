@@ -117,7 +117,7 @@ def upload_company(filename: Path, dbname="connectcongo", with_contact=False):
         print("current_line: ", current_line)
         raise error
     
-def upload_contact_parsed(cur, contacts, conn):
+def upload_contact_parsed(cur, contacts, conn, country:str):
     progress_bar = progressbar.ProgressBar(min_value=0, max_value=len(contacts))
     progress_bar.widgets = (
         ["uploading lines: "]
@@ -143,19 +143,19 @@ def upload_contact_parsed(cur, contacts, conn):
             query = f""" 
                 INSERT INTO public.contacts(
                 contact_id, contact_full_name, contact_phones, contact_email, contact_source,
-                contact_address, contact_role, contact_nationality, contact_linkedin_url)
+                contact_address, contact_role, contact_nationality, contact_linkedin_url, contact_country)
                 VALUES ('{empty_contact_id}', '{remove_single_quote(contact_name)}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
                 '{contact.get("contact_email",'')}', 'LINKEDIN', '{address}', 
-                '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}');
+                '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}', '{country}');
             """
         else:
             query = f""" 
                 INSERT INTO public.contacts(
                 contact_id, contact_full_name, contact_phones, contact_email, contact_source, company_id,
-                contact_address, contact_role, contact_nationality, contact_linkedin_url)
+                contact_address, contact_role, contact_nationality, contact_linkedin_url, contact_country)
                 VALUES ('{empty_contact_id}', '{remove_single_quote(contact_name)}', '{contact.get("contact_contact_phones") if contact.get("contact_contact_phones") else [] }', 
                 '{contact.get("contact_email",'')}', 'LINKEDIN', '{contact.get('contact_company_id')}', '{address}', 
-                '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}');
+                '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}', '{country}');
             """
         cur.execute(query=query)
         progress_bar.update(progress_bar.value + 1)
