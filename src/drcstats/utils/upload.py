@@ -134,7 +134,7 @@ def upload_contact_parsed(cur, contacts, conn):
         if "né" in nationality:
             nationality = "CD"
         # check if exists
-        query = f"SELECT contact_id FROM contacts WHERE contact_id = '{empty_contact_id}'"
+        query = f"SELECT contact_id FROM contacts WHERE contact_id = '{empty_contact_id}';"
         cur.execute(query)
         contact_id = cur.fetchone()
         if contact_id:
