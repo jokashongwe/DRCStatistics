@@ -29,11 +29,11 @@ def process_linkedin(dbname: str, query: str, suffix: str = "RDC") -> List[str]:
     conn = psycopg2.connect(f"dbname={dbname} user=konnect password=secret123")
     curr = conn.cursor()
     curr.execute(query)
-    for company_id, company_legal_name in curr.fetchall():
+    for company_id, company_legal_name, company_country in curr.fetchall():
         contacts = []
         try:
             contacts = search_linkedin(
-                company_id=company_id, company=company_legal_name, suffix=suffix
+                company_id=company_id, company=company_legal_name, suffix=company_country
             )
         except Exception as e:
             print(e)
@@ -97,6 +97,6 @@ def search_linkedin(company_id: str, company: str, suffix="RDC"):
 
 
 if __name__ == "__main__":
-    query = query = f"SELECT company_id, company_legal_name FROM companies WHERE company_source = 'PNET' order by company_legal_name asc;"
+    query = query = f"SELECT company_id, company_legal_name, company_country FROM companies WHERE company_source = 'PNET' order by company_legal_name asc;"
     process_linkedin(dbname="connectcongo", query=query)
     #process_linkedin_for_contact(dbname="connectcongo")
