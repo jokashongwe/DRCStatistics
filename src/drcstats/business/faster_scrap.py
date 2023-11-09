@@ -160,8 +160,8 @@ def thread_processor(job: str, country: str):
             except Exception as e:
                 continue
             conn.commit()
-            cur.close()
-            conn.close()
+    cur.close()
+    conn.close()
 
 
 def get_companies(country:str):
