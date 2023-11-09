@@ -186,14 +186,8 @@ def companies_scrap_executor(countries: list):
     """
     for country in countries:
         country = country.strip()
-        
-        for selected_jobs in list_iterator(JOBS_LIST, THREADS_BUCKET):
-            pool = ThreadPoolExecutor(max_workers=THREADS_WORKERS)
-            [
-                pool.submit(thread_processor, job=job, country=country)
-                for job in selected_jobs
-            ]
-            pool.shutdown(wait=True)
+        for job in JOBS_LIST:
+            thread_processor(job=job, country=country)
 
 
 def companies_scrap():
