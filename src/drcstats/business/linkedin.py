@@ -5,7 +5,7 @@ import psycopg2
 from typing import List, Dict
 from src.drcstats.utils.upload import upload_contact_parsed
 from fuzzywuzzy import fuzz
-from src.drcstats.business.faster_scrap import parse_string
+from src.drcstats.business.faster_scrap import parse_string, is_exist
 
 def is_person(result: str, company: str):
     name = result.split("|")[0]
@@ -30,14 +30,23 @@ def process_linkedin(dbname: str, query: str, suffix: str = "RDC") -> List[str]:
     conn = psycopg2.connect(f"dbname={dbname} user=konnect password=secret123")
     curr = conn.cursor()
     curr.execute(query)
-    for company_id, company_legal_name, company_country in curr.fetchall():
+    for company_legal_name, company_country in curr.fetchall():
         contacts = []
         parsed_company_name = parse_string(company_legal_name).strip()
         if not parsed_company_name:
             continue
         try:
+            company_exists = is_exist(
+                object_id=company_legal_name,
+                field="company_id, company_legal_name",
+                table="companies",
+                cur=curr,
+                where_expr=f"company_country = '{company_country}' AND company_legal_name ilike '{company_legal_name}%'",
+            )
+            if not company_exists:
+                continue
             contacts = search_linkedin(
-                company_id=company_id, company=company_legal_name, suffix=company_country
+                company_id=company_exists[0], company=company_legal_name, suffix=company_country
             )
         except Exception as e:
             print(e)
@@ -101,6 +110,6 @@ def search_linkedin(company_id: str, company: str, suffix="RDC"):
 
 
 if __name__ == "__main__":
-    query = query = f"SELECT company_id, company_legal_name, company_country FROM companies WHERE length(company_legal_name) > 3 order by company_legal_name asc;"
+    query = query = f"SELECT distinct company_legal_name, company_country FROM companies WHERE company_legal_name order by company_legal_name asc;"
     process_linkedin(dbname="connectcongo", query=query)
     #process_linkedin_for_contact(dbname="connectcongo")
