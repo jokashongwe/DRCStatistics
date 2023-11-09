@@ -49,7 +49,7 @@ def process_linkedin(dbname: str, query: str, suffix: str = "RDC") -> List[str]:
                 company_id=company_exists[0], company=company_legal_name, suffix=company_country
             )
         except Exception as e:
-            print(e)
+            conn.commit()
             continue
         if len(contacts) <= 0:
             continue
