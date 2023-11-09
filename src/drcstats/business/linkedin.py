@@ -53,7 +53,7 @@ def process_linkedin(dbname: str, query: str, suffix: str = "RDC") -> List[str]:
             continue
         if len(contacts) <= 0:
             continue
-        upload_contact_parsed(cur=curr, contacts=contacts, conn=conn, country=suffix)
+        upload_contact_parsed(cur=curr, contacts=contacts, conn=conn, country=company_country)
     curr.close()
     conn.close()
 

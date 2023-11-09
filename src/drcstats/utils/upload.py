@@ -157,6 +157,8 @@ def upload_contact_parsed(cur, contacts, conn, country:str):
                 '{contact.get("contact_email",'')}', 'LINKEDIN', '{contact.get('contact_company_id')}', '{address}', 
                 '{remove_single_quote(contact.get('contact_role'))}', '{nationality}', '{remove_single_quote(contact.get('contact_linkedin_url'))}', '{country}');
             """
+        print(query)
+        raise
         cur.execute(query=query)
         progress_bar.update(progress_bar.value + 1)
     conn.commit()
