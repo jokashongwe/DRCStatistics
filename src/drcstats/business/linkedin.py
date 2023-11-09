@@ -5,6 +5,7 @@ import psycopg2
 from typing import List, Dict
 from src.drcstats.utils.upload import upload_contact_parsed
 from fuzzywuzzy import fuzz
+from src.drcstats.business.faster_scrap import parse_string
 
 def is_person(result: str, company: str):
     name = result.split("|")[0]
@@ -31,6 +32,9 @@ def process_linkedin(dbname: str, query: str, suffix: str = "RDC") -> List[str]:
     curr.execute(query)
     for company_id, company_legal_name, company_country in curr.fetchall():
         contacts = []
+        parsed_company_name = parse_string(company_legal_name).strip()
+        if not parsed_company_name:
+            continue
         try:
             contacts = search_linkedin(
                 company_id=company_id, company=company_legal_name, suffix=company_country
