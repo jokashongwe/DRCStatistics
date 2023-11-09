@@ -110,6 +110,6 @@ def search_linkedin(company_id: str, company: str, suffix="RDC"):
 
 
 if __name__ == "__main__":
-    query = query = f"SELECT distinct company_legal_name, company_country FROM companies order by company_legal_name desc;"
+    query = query = f"SELECT distinct company_legal_name, company_country FROM companies order by company_legal_name asc;"
     process_linkedin(dbname="connectcongo", query=query)
     #process_linkedin_for_contact(dbname="connectcongo")
