@@ -72,8 +72,9 @@ def thread_processor(job: str, country: str):
                 if "linkedin" not in link:
                     continue
 
-                if "jobs" in link or "feed" in link:
+                if "jobs" in link or "feed" in link or "posts" in link:
                     continue
+
                 contact = None
                 company = None
                 if "company" in link:
@@ -123,13 +124,14 @@ def thread_processor(job: str, country: str):
                     company["company_id"] = hashlib.md5(
                         f"{json.dumps(company)}".encode("utf-8")
                     ).hexdigest()
-
+                    company_name = company_name.lower().replace(country.lower(), "")
+                    
                     company_exists = is_exist(
                         object_id=company_name,
                         field="company_id, company_legal_name",
                         table="companies",
                         cur=cur,
-                        where_expr=f"company_legal_name = '{company_name}' AND company_country = '{country}'",
+                        where_expr=f"company_country = '{country}' AND company_legal_name ilike '{company_name}%'",
                     )
                     # print("\nResult company: ", company_exists)
                     if company and not company_exists:
@@ -137,14 +139,13 @@ def thread_processor(job: str, country: str):
                     company_id = (
                         company_exists[0] if company_exists else company["company_id"]
                     )
-                    contact_name = contact.get("contact_name")
                     contact_exists = (
                         is_exist(
                             object_id=contact.get("contact_id"),
                             field="contact_full_name",
                             table="contacts",
                             cur=cur,
-                            where_expr=f"contact_full_name = '{contact_name}' AND company_id={company_id}",
+                            where_expr=f"contact_linkedin_url = '{link}'",
                         )
                         if contact
                         else None
@@ -161,6 +162,21 @@ def thread_processor(job: str, country: str):
             conn.commit()
             cur.close()
             conn.close()
+
+
+def get_companies(country:str):
+    conn = psycopg2.connect("dbname=connectcongo user=konnect password=secret123")
+    curr = conn.cursor()
+    query = f"SELECT company_id, company_legal_name FROM companies WHERE company_country ='{country}' AND len(company_legal_name) > 1"
+    curr.execute(query)
+    companies = []
+    for company_id, company_legal_name in curr.fetchall():
+        if len(companies) >= 5:
+            yield companies
+            companies  = []
+        companies.append({"company_id": company_id, "company_legal_name":company_legal_name})
+    curr.close()
+    conn.close()
 
 
 def companies_scrap_executor(countries: list):

@@ -7,7 +7,7 @@ import time
 import random
 
 def remove_single_quote(string:str):
-    result = string.replace("'", " ") if string else ""
+    result = string.replace("'", "''") if string else ""
     return result.split("(")[0].strip()
 
 
