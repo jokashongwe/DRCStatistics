@@ -97,6 +97,6 @@ def search_linkedin(company_id: str, company: str, suffix="RDC"):
 
 
 if __name__ == "__main__":
-    query = query = f"SELECT company_id, company_legal_name, company_country FROM companies WHERE len(company_legal_name) = 3 order by company_legal_name asc;"
+    query = query = f"SELECT company_id, company_legal_name, company_country FROM companies WHERE length(company_legal_name) = 3 order by company_legal_name asc;"
     process_linkedin(dbname="connectcongo", query=query)
     #process_linkedin_for_contact(dbname="connectcongo")
