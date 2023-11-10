@@ -219,10 +219,10 @@ def upload_contact(filename: Path, dbname="connectcongo"):
 if __name__ == "__main__":
     current_folder = Path(__file__).parent
     upload_list = ["public_companies.json", "minihydro.json","arsp.json","produced_guce_company_1698999754.json", "produced_fec_company_1697796196.json"]
-    for company_filename in upload_list:
-        generated_folder = Path(current_folder.parent.parent.parent, "uploads", company_filename)
-        # print("gen: ", generated_folder)
-        upload_company(generated_folder)
+    #for company_filename in upload_list:
+    #    generated_folder = Path(current_folder.parent.parent.parent, "uploads", company_filename)
+    #    # print("gen: ", generated_folder)
+    #    upload_company(generated_folder)
     contact_uploads = ["produced_guce_contact_1698999754.json"]
     for contact_filename in contact_uploads:
         generated_folder = Path(current_folder.parent.parent.parent, "uploads", contact_filename)
