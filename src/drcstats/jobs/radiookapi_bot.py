@@ -90,7 +90,7 @@ def start():
         url_format="https://www.radiookapi.net/offres-demploi/page/280?page={page_number}",
         max_pages=289,
         fn_parse_page=page_parser,
-        path="out/",
+        path="./generated",
     )
     robot.start()
 

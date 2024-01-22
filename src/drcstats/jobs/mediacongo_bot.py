@@ -46,7 +46,7 @@ def start():
         url_format="https://www.mediacongo.net/emplois-titre--societe--page-{page_number}.html",
         max_pages=100,
         fn_parse_page=page_parser,
-        path=Path("../../../generated"),
+        path=Path("./generated"),
     )
     robot.start()
 
