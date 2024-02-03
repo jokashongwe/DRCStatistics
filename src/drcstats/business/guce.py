@@ -9,7 +9,7 @@ import progressbar
 import hashlib
 
 COMPANY_SECTORS_KEY = [
-    "Mine","mines","Minier", "Minière", "Informatique","Beauté", "Import", "Placement", "Sous-traitance", 
+    "Mine","mines","Minier", "Minière", "Informatique","Beauté", "Importation", "Import", "Placement", "Sous-traitance", 
     "Cosmétique", "Massage", "Logiciel", "Logiciels", "Agriculture", "élevage", "Foresterie", "Agro-foresterie",
     "Cuivre", "Cobalt", "Coltan", "Conseil", "Finance", "Banque", "Télécommunication","Fôret","bois","Alcool", "Bar",
     "Micro-finance", "Téléphonie", "Internet", "Réseaux","Paie", "Commerce","Mobile", "Transport",

@@ -26,4 +26,4 @@ def json_to_csv(file: Path, extension: str = "json"):
             
 
 if __name__ == '__main__':
-    json_to_csv(Path("./generated/output_mediacongo_2023_12_23_09_00_43.ndjson"), "ndjson")
+    json_to_csv(Path("./generated/output_mediacongo_2024_01_22_13_17_28.ndjson"), "ndjson")
