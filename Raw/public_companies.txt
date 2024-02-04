@@ -1,3 +1,7 @@
+DGRK
+ANSER
+DYNACOPE
+BECECO
 GECAMINES
 SODIMCO
 OKIMO
@@ -92,3 +96,45 @@ Ministère Culture
 Ministère Relations avec le parlement
 Ministère Personnes vivant avec handicap
 Ministère Près le président de la République
+ARSP
+IGT
+IGPN
+Fond Forrestier
+FOMIN
+Congo Airways
+CNJF
+FECOFA
+LINAFOOT
+SOCIR
+SEP Congo
+SONAHYDRO
+Cadastre Minier
+PNLS
+PNMLS
+PNLP
+PNLM
+PEV
+PADMPME
+FONER
+Cour constitutionnelle
+Cour de cassation
+Assemblée Nationale
+SENAT
+FONAREV
+FOGEC
+ANADEC
+GUCE
+Guichet Unique
+DGDP
+ONIP
+CNDH
+Présidence
+Primature
+Tribunal de Commerce
+Tribunal de Grande Instance
+Magistrat
+Banque Centrale
+Metelsat
+PROMIN
+SICOMINES
+MIBA
