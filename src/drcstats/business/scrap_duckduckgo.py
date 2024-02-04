@@ -70,11 +70,7 @@ def thread_processor(query: str, country: str):
                     continue
                 actuality = None
                 if "jobs" in link or "feed" in link or "posts" in link:
-                    actuality = {
-                        "actuality_title": title,
-                        "actuality_link": link,
-                        "actuality_company_name": query,
-                    }
+                    continue
 
                 profile = None
                 company = None
@@ -93,20 +89,19 @@ def thread_processor(query: str, country: str):
                     if not (query.lower() in parse_string(title_parts[0]).lower()):
                         profile = {
                             "profile_name": parse_string(title_parts[0]),
-                            "profile_role": parse_string(title_parts[1].strip()),
-                            "profile_description": result.get("body"),
-                            "profile_origin": query,
                             "profile_linkedin_url": link,
-                            "profile_country": country,
+                            "profile_resume": "",
                         }
                         profile["id"] = hashlib.md5(
                             f"{json.dumps(profile)}".encode("utf-8")
                         ).hexdigest()
 
                         experience = {
+                            "experience_role": parse_string(title_parts[1].strip()),
+                            "experience_description": result.get("body"),
                             "experience_origin": query,
                             "experience_profile_id": profile.get("id"),
-                            "experience_link": link,
+                            "experience_linkedin_url": link,
                         }
 
                     experience["id"] = hashlib.md5(
