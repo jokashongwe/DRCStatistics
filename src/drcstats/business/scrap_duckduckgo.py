@@ -132,6 +132,37 @@ def thread_processor(query: str, country: str):
                 continue
 
 
+def scrap_actualities(query: str, source_id: str, country: str="RDC"):
+    """
+        This Script help to find all actualities attached to a company or a profile
+    """
+    query = parse_string(query).strip()
+    with DDGS() as ddgs:
+        keyword = f"{query} {country}".strip()
+
+        for result in ddgs.text(keyword, max_results=RESULTS):
+            try:
+                link = result.get("href")
+                title = result.get("title")
+                
+                actuality = None
+
+                actuality = {
+                    "actuality_link": link,
+                    "actuality_title": title,
+                    "actuality_resume": result.get("body"),
+                    "actuality_source": source_id
+                }
+                
+                if actuality:
+                    file_path = "./generated/output_scrap_public_actualities.json"
+                    with open(file_path, "a+", encoding="utf-8") as fileIO:
+                        fileIO.write(json.dumps(actuality, ensure_ascii=False) + "\n")
+            except Exception as e:
+                continue
+
+    
+
 def readCompanies(filename: str):
     list = []
     with open(filename, encoding="UTF-8") as companyFile:
@@ -163,7 +194,7 @@ def companies_scrap_executor():
     )
     progress_bar.start()
     for company in companies:
-        thread_processor(query=company.get("legal_name"), country="RDC")
+        scrap_actualities(query=company.get("legal_name"),  source_id=company.get("legal_name"), country="RDC")
         progress_bar.update(progress_bar.value + 1)
     progress_bar.finish()
 

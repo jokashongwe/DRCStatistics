@@ -3,7 +3,7 @@ import operator
 
 def in_array(lst, e):
     for idx, elt in enumerate(lst) :
-        if elt.get("profile_linkedin_url") == e.get("profile_linkedin_url"):
+        if elt.get("profile_name") and elt.get("profile_linkedin_url") == e.get("profile_linkedin_url"):
             return idx
     return -1
     
@@ -48,6 +48,10 @@ def merge_experiences(profile_list: list[dict]) -> list[dict]:
                 merged_list[pos]["experience_social_links"] = merged_list[pos]["experience_social_links"].append(pf.get("experience_linkedin_url"))
             else:
                 merged_list[pos]["experience_social_links"] = [pf.get("experience_linkedin_url")]
+
+            if merged_list[pos].get("experience_origins") and pf.get("experience_origin") not in merged_list[pos].get("experience_origins"):
+                merged_list[pos]["experience_origins"] = merged_list[pos]["experience_origins"].append(pf.get("experience_origin"))
+
             
             if merged_list[pos].get("merged_ids"):
                 merged_list[pos]["merged_ids"].append(pf.get('id'))
@@ -55,6 +59,9 @@ def merge_experiences(profile_list: list[dict]) -> list[dict]:
                 merged_list[pos]["merged_ids"] = [pf.get('id')]
         else:
             if "https://cd." in pf.get("experience_linkedin_url"):
+                pf["experience_social_links"] =  [pf.get("experience_linkedin_url")]
+                pf["experience_origin"] = f"{pf["experience_origin"]}".lower()
+                pf["experience_origins"] =  [pf.get("experience_origin")]
                 merged_list.append(pf)
     return merged_list
     
