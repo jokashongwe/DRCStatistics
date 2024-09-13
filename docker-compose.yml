@@ -1,0 +1,33 @@
+services:
+  corpo-postgres:
+    image: 
+    ports:
+    environment:
+    volumes:
+     - ./database:/docker-entrypoint-initdb.d
+
+  corpo-scrapper-cron:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    depends_on:
+      - corpo-postgres
+    environment:
+      DB_HOST:
+      DB_NAME:
+      DB_USER:
+      DB_PASSWORD:
+      
+  corpo-next-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST:
+      DB_NAME:
+      DB_USER:
+      DB_PASSWORD:
+    depends_on:
+      - corpo-postgres
+  
+  
